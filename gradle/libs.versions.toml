@@ -1,0 +1,37 @@
+[versions]
+agp = "8.13.1"
+appcompatVersion = "1.4.1"
+cardview = "1.0.0"
+constraintlayoutVersion = "2.2.1"
+firebaseAuth = "24.0.1"
+googleServices = "4.4.2"
+junit = "4.13.2"
+junitVersion = "1.1.5"
+espressoCore = "3.5.1"
+appcompat = "1.6.1"
+material = "1.10.0"
+activity = "1.8.0"
+constraintlayout = "2.1.4"
+materialVersion = "1.13.0"
+playServicesAuth = "21.4.0"
+recyclerview = "1.4.0"
+
+[libraries]
+appcompat-v141 = { module = "androidx.appcompat:appcompat", version.ref = "appcompatVersion" }
+cardview = { module = "androidx.cardview:cardview", version.ref = "cardview" }
+constraintlayout-v221 = { module = "androidx.constraintlayout:constraintlayout", version.ref = "constraintlayoutVersion" }
+firebase-auth = { module = "com.google.firebase:firebase-auth", version.ref = "firebaseAuth" }
+junit = { group = "junit", name = "junit", version.ref = "junit" }
+ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
+espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
+appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
+constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
+material-v1130 = { module = "com.google.android.material:material", version.ref = "materialVersion" }
+play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "playServicesAuth" }
+recyclerview = { module = "androidx.recyclerview:recyclerview", version.ref = "recyclerview" }
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "agp" }
+google-services = { id = "com.google.gms.google-services", version.ref = "googleServices" }
