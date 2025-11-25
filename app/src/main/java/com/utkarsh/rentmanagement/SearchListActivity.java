@@ -10,8 +10,8 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import com.utkarsh.rentmanagement.adapter.ItemAdapter;
-import com.utkarsh.rentmanagement.model.Item;
+import com.utkarsh.rentmanagement.adapter.userAdapter;
+import com.utkarsh.rentmanagement.model.user;
 import com.utkarsh.rentmanagement.utils.AuthUtils;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,8 +22,8 @@ public class SearchListActivity extends AppCompatActivity {
     private EditText etSearch;
     private Button btnSearch;
     private TextView tvEmpty;
-    private ItemAdapter adapter;
-    private List<Item> itemList;
+    private userAdapter adapter;
+    private List<user> userList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,10 +50,10 @@ public class SearchListActivity extends AppCompatActivity {
     }
 
     private void setupRecyclerView() {
-        itemList = new ArrayList<>();
-        adapter = new ItemAdapter(itemList, new ItemAdapter.OnItemClickListener() {
+        userList = new ArrayList<>();
+        adapter = new userAdapter(userList, new userAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(Item item) {
+            public void onItemClick(user item) {
                 onItemClicked(item);
             }
         });
@@ -73,19 +73,22 @@ public class SearchListActivity extends AppCompatActivity {
 
     private void loadSampleData() {
         // Add sample data - replace with your actual data source
-        itemList.clear();
-        itemList.add(new Item("1", "Apartment A", "2 BHK apartment with balcony", 1200.00, "Apartment"));
-        itemList.add(new Item("2", "Studio Flat", "Compact studio near downtown", 800.00, "Studio"));
-        itemList.add(new Item("3", "Luxury Villa", "3 BHK villa with pool", 2500.00, "Villa"));
-        itemList.add(new Item("4", "Office Space", "Commercial space for rent", 1500.00, "Commercial"));
-        itemList.add(new Item("5", "House B", "Family house with garden", 1800.00, "House"));
-        itemList.add(new Item("6", "Apartment B", "1 BHK economical apartment", 600.00, "Apartment"));
-        itemList.add(new Item("7", "Penthouse", "Luxury penthouse with view", 3500.00, "Penthouse"));
-        itemList.add(new Item("8", "Condo", "Modern condo with amenities", 2000.00, "Condo"));
-        itemList.add(new Item("9", "Townhouse", "Spacious townhouse", 1600.00, "Townhouse"));
-        itemList.add(new Item("10", "Duplex", "Two-story duplex", 2200.00, "Duplex"));
+        userList.clear();
+        // Sample user data
+        userList.add(new user("Rajesh Kumar", "USER001", "123 Main Street, Mumbai, Maharashtra", "9876543210", 123456789012L, true, "https://avatar.iran.liara.run/public/22", "2024-01-15", "2024-11-25"));
+        userList.add(new user("Priya Sharma", "USER002", "456 Park Avenue, Delhi", "8765432109", 234567890123L, false, "https://avatar.iran.liara.run/public/23", "2024-02-20", "2024-11-24"));
+        userList.add(new user("Amit Patel", "USER003", "789 MG Road, Bangalore, Karnataka", "7654321098", 345678901234L, true, "https://avatar.iran.liara.run/public/24", "2024-03-10", "2024-11-23"));
+        userList.add(new user("Sneha Gupta", "USER004", "321 Church Street, Chennai, Tamil Nadu", "6543210987", 456789012345L, true, "https://avatar.iran.liara.run/public/25", "2024-04-05", "2024-11-22"));
+        userList.add(new user("Vikram Singh", "USER005", "654 Marine Drive, Kolkata, West Bengal", "5432109876", 567890123456L, false, "https://avatar.iran.liara.run/public/26", "2024-05-12", "2024-11-21"));
+        userList.add(new user("Anjali Reddy", "USER006", "987 Jubilee Hills, Hyderabad, Telangana", "4321098765", 678901234567L, true, "https://avatar.iran.liara.run/public/27", "2024-06-18", "2024-11-20"));
+        userList.add(new user("Rahul Verma", "USER007", "147 Sector 17, Chandigarh", "3210987654", 789012345678L, false, "https://avatar.iran.liara.run/public/28", "2024-07-22", "2024-11-19"));
+        userList.add(new user("Neha Joshi", "USER008", "258 Ashram Road, Ahmedabad, Gujarat", "2109876543", 890123456789L, true, "https://avatar.iran.liara.run/public/29", "2024-08-30", "2024-11-18"));
+        userList.add(new user("Sanjay Mehta", "USER009", "369 FC Road, Pune, Maharashtra", "1098765432", 901234567890L, true, "https://avatar.iran.liara.run/public/30", "2024-09-14", "2024-11-17"));
+        userList.add(new user("Pooja Desai", "USER010", "741 Jaipur Road, Jaipur, Rajasthan", "9988776655", 112233445566L, false, "https://avatar.iran.liara.run/public/31", "2024-10-08", "2024-11-16"));
+        userList.add(new user("Karan Malhotra", "USER011", "852 Gandhi Nagar, Lucknow, UP", "8877665544", 223344556677L, true, "https://avatar.iran.liara.run/public/32", "2024-11-01", "2024-11-15"));
+        userList.add(new user("Meera Nair", "USER012", "963 Banjara Hills, Kochi, Kerala", "7766554433", 334455667788L, false, "https://avatar.iran.liara.run/public/33", "2024-11-10", "2024-11-14"));
 
-        adapter.updateData(itemList);
+        adapter.updateData(userList);
     }
 
     private void setupSearchFunctionality() {
@@ -159,10 +162,10 @@ public class SearchListActivity extends AppCompatActivity {
         }
     }
 
-    private void onItemClicked(Item item) {
+    private void onItemClicked(user item) {
         // Handle item click - show details, edit, etc.
         android.widget.Toast.makeText(this,
-                "Clicked: " + item.getTitle() + "\nPrice: $" + item.getPrice(),
+                "Clicked: " + item.getName() + "\nPrice: $" + item.getMobileNo(),
                 android.widget.Toast.LENGTH_SHORT).show();
 
         // You can start a new activity or show a dialog here

@@ -47,4 +47,6 @@ dependencies {
     implementation libs.constraintlayout.v221
     implementation libs.recyclerview
     implementation libs.cardview
+    implementation libs.glide
+
 }
