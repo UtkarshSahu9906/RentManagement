@@ -1,7 +1,6 @@
 package com.utkarsh.rentmanagement;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -17,25 +16,25 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.utkarsh.rentmanagement.adapter.userAdapter;
-import com.utkarsh.rentmanagement.dialog.UserDialog;
-import com.utkarsh.rentmanagement.model.user;
+import com.utkarsh.rentmanagement.adapter.CustomerAdapter;
+import com.utkarsh.rentmanagement.dialog.CustomerDialog;
+import com.utkarsh.rentmanagement.model.Customer;
 import com.utkarsh.rentmanagement.utils.AuthUtils;
 import com.utkarsh.rentmanagement.utils.FirebaseHelper;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SearchListActivity extends AppCompatActivity implements UserDialog.UserDialogListener {
+public class SearchListActivity extends AppCompatActivity implements CustomerDialog.UserDialogListener {
 
     private RecyclerView recyclerView;
     private EditText etSearch;
     private Button btnSearch;
     private TextView tvEmpty;
     private FloatingActionButton fabAddUser;
-    private userAdapter adapter;
-    private List<user> userList;
+    private CustomerAdapter adapter;
+    private List<Customer> customerList;
     private FirebaseHelper firebaseHelper;
-    private UserDialog userDialog;
+    private CustomerDialog customerDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,8 +61,8 @@ public class SearchListActivity extends AppCompatActivity implements UserDialog.
 
         // Handle image picker results
         if (requestCode == 1001 || requestCode == 1002) { // ImagePicker request codes
-            if (userDialog != null) {
-                userDialog.handleActivityResult(requestCode, resultCode, data);
+            if (customerDialog != null) {
+                customerDialog.handleActivityResult(requestCode, resultCode, data);
             }
         }
     }
@@ -77,10 +76,10 @@ public class SearchListActivity extends AppCompatActivity implements UserDialog.
     }
 
     private void setupRecyclerView() {
-        userList = new ArrayList<>();
-        adapter = new userAdapter(userList, new userAdapter.OnItemClickListener() {
+        customerList = new ArrayList<>();
+        adapter = new CustomerAdapter(customerList, new CustomerAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(user item) {
+            public void onItemClick(Customer item) {
                 onUserClicked(item);
             }
         });
@@ -107,16 +106,16 @@ public class SearchListActivity extends AppCompatActivity implements UserDialog.
         FirebaseFirestore.getInstance().collection("users")
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
-                    userList.clear();
+                    customerList.clear();
                     for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
                         try {
-                            user user = document.toObject(user.class);
-                            userList.add(user);
+                            Customer Customer = document.toObject(Customer.class);
+                            customerList.add(Customer);
                         } catch (Exception e) {
-                            Toast.makeText(this, "Error loading user: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(this, "Error loading Customer: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     }
-                    adapter.updateData(userList);
+                    adapter.updateData(customerList);
                     checkEmptyState();
                 })
                 .addOnFailureListener(e -> {
@@ -135,7 +134,7 @@ public class SearchListActivity extends AppCompatActivity implements UserDialog.
             }
         });
 
-        // Real-time search as user types
+        // Real-time search as Customer types
         etSearch.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -178,13 +177,13 @@ public class SearchListActivity extends AppCompatActivity implements UserDialog.
     }
 
     private void showAddUserDialog() {
-        userDialog = new UserDialog(this, this);
-        userDialog.show();
+        customerDialog = new CustomerDialog(this, this);
+        customerDialog.show();
     }
 
-    private void showEditUserDialog(user user) {
-        userDialog = new UserDialog(this, user, this);
-        userDialog.show();
+    private void showEditUserDialog(Customer Customer) {
+        customerDialog = new CustomerDialog(this, Customer, this);
+        customerDialog.show();
     }
 
     private void performSearch(String query) {
@@ -211,76 +210,76 @@ public class SearchListActivity extends AppCompatActivity implements UserDialog.
         }
     }
 
-    private void onUserClicked(user user) {
+    private void onUserClicked(Customer Customer) {
         // Show options: Edit or View Details
-        showUserOptionsDialog(user);
+        showUserOptionsDialog(Customer);
     }
 
-    private void showUserOptionsDialog(final user user) {
+    private void showUserOptionsDialog(final Customer Customer) {
         androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
         builder.setTitle("User Options");
-        builder.setMessage("Choose an action for " + user.getName());
+        builder.setMessage("Choose an action for " + Customer.getName());
 
         builder.setPositiveButton("Edit", (dialog, which) -> {
-            showEditUserDialog(user);
+            showEditUserDialog(Customer);
         });
 
         builder.setNegativeButton("View Details", (dialog, which) -> {
-            showUserDetails(user);
+            showUserDetails(Customer);
         });
 
         builder.setNeutralButton("Delete", (dialog, which) -> {
-            showDeleteConfirmation(user);
+            showDeleteConfirmation(Customer);
         });
 
         builder.show();
     }
 
-    private void showDeleteConfirmation(user user) {
+    private void showDeleteConfirmation(Customer Customer) {
         androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
         builder.setTitle("Delete User");
-        builder.setMessage("Are you sure you want to delete " + user.getName() + "? This action cannot be undone.");
+        builder.setMessage("Are you sure you want to delete " + Customer.getName() + "? This action cannot be undone.");
 
         builder.setPositiveButton("Delete", (dialog, which) -> {
-            deleteUserFromFirebase(user);
+            deleteUserFromFirebase(Customer);
         });
 
         builder.setNegativeButton("Cancel", null);
         builder.show();
     }
 
-    private void deleteUserFromFirebase(user user) {
+    private void deleteUserFromFirebase(Customer Customer) {
         // Delete image from storage first
-        if (!user.getImgUrl().equals("default")) {
-            firebaseHelper.deleteImageFromFirebase(user.getImgUrl());
+        if (!Customer.getImgUrl().equals("default")) {
+            firebaseHelper.deleteImageFromFirebase(Customer.getImgUrl());
         }
 
-        // Delete user from firestore
-        firebaseHelper.deleteUserFromFirestore(String.valueOf(user.getMobileNo()))
+        // Delete Customer from firestore
+        firebaseHelper.deleteUserFromFirestore(String.valueOf(Customer.getMobileNo()))
                 .addOnSuccessListener(aVoid -> {
                     // Remove from local list
-                    userList.removeIf(u -> String.valueOf(u.getMobileNo()).equals(String.valueOf(user.getMobileNo())));
-                    adapter.updateData(userList);
+                    customerList.removeIf(u -> String.valueOf(u.getMobileNo()).equals(String.valueOf(Customer.getMobileNo())));
+                    adapter.updateData(customerList);
                     Toast.makeText(this, "User deleted successfully", Toast.LENGTH_SHORT).show();
                 })
                 .addOnFailureListener(e -> {
-                    Toast.makeText(this, "Failed to delete user: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Failed to delete Customer: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
     }
 
-    private void showUserDetails(user user) {
+    private void showUserDetails(Customer Customer) {
         // Create a detailed view dialog
         androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
         builder.setTitle("User Details");
 
-        String details = "Name: " + user.getName() + "\n" +
-                "User ID: " + user.getUid() + "\n" +
-                "Address: " + user.getAddress() + "\n" +
-                "Mobile: " + user.getMobileNo() + "\n" +
-                "Aadhaar: " + user.getAadhaarNo() + "\n" +
-                "Payment Status: " + (user.isPaid() ? "Paid" : "Pending") + "\n" +
-                "Created: " + user.getCreatedAt() + "\n" +
-                "Updated: " + user.getUpdatedAt();
+        String details = "Name: " + Customer.getName() + "\n" +
+                "User ID: " + Customer.getUid() + "\n" +
+                "Address: " + Customer.getAddress() + "\n" +
+                "Mobile: " + Customer.getMobileNo() + "\n" +
+                "Aadhaar: " + Customer.getAadhaarNo() + "\n" +
+                "Payment Status: " + (Customer.isPaid() ? "Paid" : "Pending") + "\n" +
+                "Created: " + Customer.getCreatedAt() + "\n" +
+                "Updated: " + Customer.getUpdatedAt();
 
         builder.setMessage(details);
         builder.setPositiveButton("OK", null);
@@ -289,25 +288,25 @@ public class SearchListActivity extends AppCompatActivity implements UserDialog.
 
     // UserDialogListener implementation
     @Override
-    public void onUserSaved(user user) {
-        // Add new user to the list
-        userList.add(0, user);
-        adapter.updateData(userList);
+    public void onUserSaved(Customer Customer) {
+        // Add new Customer to the list
+        customerList.add(0, Customer);
+        adapter.updateData(customerList);
         recyclerView.smoothScrollToPosition(0);
         checkEmptyState();
         Toast.makeText(this, "User added successfully!", Toast.LENGTH_SHORT).show();
     }
 
     @Override
-    public void onUserUpdated(user user) {
-        // Find and update the existing user
-        for (int i = 0; i < userList.size(); i++) {
-            if (String.valueOf(userList.get(i).getMobileNo()).equals(String.valueOf(user.getMobileNo()))) {
-                userList.set(i, user);
+    public void onUserUpdated(Customer Customer) {
+        // Find and update the existing Customer
+        for (int i = 0; i < customerList.size(); i++) {
+            if (String.valueOf(customerList.get(i).getMobileNo()).equals(String.valueOf(Customer.getMobileNo()))) {
+                customerList.set(i, Customer);
                 break;
             }
         }
-        adapter.updateData(userList);
+        adapter.updateData(customerList);
         checkEmptyState();
         Toast.makeText(this, "User updated successfully!", Toast.LENGTH_SHORT).show();
     }

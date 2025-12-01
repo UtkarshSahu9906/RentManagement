@@ -18,18 +18,18 @@ import com.bumptech.glide.Glide;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.material.textfield.TextInputEditText;
 import com.utkarsh.rentmanagement.R;
-import com.utkarsh.rentmanagement.model.user;
+import com.utkarsh.rentmanagement.model.Customer;
 import com.utkarsh.rentmanagement.utils.FirebaseHelper;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class UserDialog {
+public class CustomerDialog {
 
     private Dialog dialog;
     private Context context;
     private UserDialogListener listener;
-    private user existingUser;
+    private Customer existingCustomer;
     private Uri selectedImageUri;
     private ImageView ivProfile;
     private Button btnSave;
@@ -40,21 +40,21 @@ public class UserDialog {
     private static final int REQUEST_IMAGE_CAMERA = 1002;
 
     public interface UserDialogListener {
-        void onUserSaved(user user);
-        void onUserUpdated(user user);
+        void onUserSaved(Customer Customer);
+        void onUserUpdated(Customer Customer);
         void onUserSaveFailed(String error);
     }
 
-    public UserDialog(Context context, UserDialogListener listener) {
+    public CustomerDialog(Context context, UserDialogListener listener) {
         this.context = context;
         this.listener = listener;
         this.firebaseHelper = new FirebaseHelper();
         createDialog();
     }
 
-    public UserDialog(Context context, user existingUser, UserDialogListener listener) {
+    public CustomerDialog(Context context, Customer existingCustomer, UserDialogListener listener) {
         this.context = context;
-        this.existingUser = existingUser;
+        this.existingCustomer = existingCustomer;
         this.listener = listener;
         this.firebaseHelper = new FirebaseHelper();
         createDialog();
@@ -76,7 +76,7 @@ public class UserDialog {
 
         initializeViews();
 
-        if (existingUser != null) {
+        if (existingCustomer != null) {
             populateUserData();
         }
     }
@@ -95,7 +95,7 @@ public class UserDialog {
         Button btnGallery = dialog.findViewById(R.id.btnGallery);
         Button btnCamera = dialog.findViewById(R.id.btnCamera);
 
-        if (existingUser != null) {
+        if (existingCustomer != null) {
             btnSave.setText("Update User");
         }
 
@@ -217,18 +217,18 @@ public class UserDialog {
         RadioButton rbPaid = dialog.findViewById(R.id.rbPaid);
         RadioButton rbPending = dialog.findViewById(R.id.rbPending);
 
-        etUserName.setText(existingUser.getName());
-        etUserId.setText(existingUser.getUid());
+        etUserName.setText(existingCustomer.getName());
+        etUserId.setText(existingCustomer.getUid());
         etUserId.setEnabled(false);
-        etAddress.setText(existingUser.getAddress());
-        etMobile.setText(""+existingUser.getMobileNo()); // Changed from String.valueOf()
+        etAddress.setText(existingCustomer.getAddress());
+        etMobile.setText(""+ existingCustomer.getMobileNo()); // Changed from String.valueOf()
         etMobile.setEnabled(false);
-        etAadhaar.setText(String.valueOf(existingUser.getAadhaarNo()));
+        etAadhaar.setText(String.valueOf(existingCustomer.getAadhaarNo()));
 
-        if (!TextUtils.isEmpty(existingUser.getImgUrl()) && !existingUser.getImgUrl().equals("default")) {
+        if (!TextUtils.isEmpty(existingCustomer.getImgUrl()) && !existingCustomer.getImgUrl().equals("default")) {
             try {
                 Glide.with(context)
-                        .load(existingUser.getImgUrl())
+                        .load(existingCustomer.getImgUrl())
                         .placeholder(R.drawable.ic_default_profile)
                         .error(R.drawable.ic_default_profile)
                         .centerCrop()
@@ -238,7 +238,7 @@ public class UserDialog {
             }
         }
 
-        if (existingUser.isPaid()) {
+        if (existingCustomer.isPaid()) {
             rbPaid.setChecked(true);
         } else {
             rbPending.setChecked(true);
@@ -339,33 +339,33 @@ public class UserDialog {
         } catch (NumberFormatException e) {
             Toast.makeText(context, "Invalid Aadhaar number", Toast.LENGTH_SHORT).show();
             btnSave.setEnabled(true);
-            btnSave.setText(existingUser != null ? "Update User" : "Save User");
+            btnSave.setText(existingCustomer != null ? "Update User" : "Save User");
             return;
         }
 
         boolean isPaid = rbPaid.isChecked();
 
         String currentTime = getCurrentTimestamp();
-        String createdAt = existingUser != null ? existingUser.getCreatedAt() : currentTime;
+        String createdAt = existingCustomer != null ? existingCustomer.getCreatedAt() : currentTime;
         String updatedAt = currentTime;
 
-        // Create user object
-        user user = new user(name, userId, address, mobileNo, aadhaarNo, isPaid, "https://avatar.iran.liara.run/public/1", createdAt, updatedAt);
+        // Create Customer object
+        Customer Customer = new Customer(name, userId, address, mobileNo, aadhaarNo, isPaid, "https://avatar.iran.liara.run/public/1", createdAt, updatedAt);
 
         // Check if mobile number already exists (for new users)
-        if (existingUser == null) {
-            checkAndSaveUser(user);
+        if (existingCustomer == null) {
+            checkAndSaveUser(Customer);
         } else {
             // For existing users, proceed with update
-            uploadImageAndSaveUser(user);
+            uploadImageAndSaveUser(Customer);
         }
     }
 
-    private void checkAndSaveUser(user user) {
+    private void checkAndSaveUser(Customer Customer) {
         // Convert mobileNo to long for checking
         long mobileLong;
         try {
-            mobileLong = user.getMobileNo();
+            mobileLong = Customer.getMobileNo();
         } catch (NumberFormatException e) {
             Toast.makeText(context, "Invalid mobile number", Toast.LENGTH_SHORT).show();
             btnSave.setEnabled(true);
@@ -382,7 +382,7 @@ public class UserDialog {
                         Toast.makeText(context, "Mobile number already registered", Toast.LENGTH_LONG).show();
                     } else {
                         // Mobile number doesn't exist, proceed with save
-                        uploadImageAndSaveUser(user);
+                        uploadImageAndSaveUser(Customer);
                     }
                 })
                 .addOnFailureListener(e -> {
@@ -392,59 +392,59 @@ public class UserDialog {
                 });
     }
 
-    private void uploadImageAndSaveUser(user user) {
+    private void uploadImageAndSaveUser(Customer Customer) {
         if (selectedImageUri != null) {
             // Upload image first
-            firebaseHelper.uploadImageToFirebase(selectedImageUri, user.getUid())
+            firebaseHelper.uploadImageToFirebase(selectedImageUri, Customer.getUid())
                     .addOnSuccessListener(downloadUri -> {
-                        // Update user with image URL
-                        user.setImgUrl("https://avatar.iran.liara.run/public/1");
-                        saveUserToFirestore(user);
+                        // Update Customer with image URL
+                        Customer.setImgUrl("https://avatar.iran.liara.run/public/1");
+                        saveUserToFirestore(Customer);
                     })
                     .addOnFailureListener(e -> {
-                        // If image upload fails, save user without image
-                        user.setImgUrl("https://avatar.iran.liara.run/public/1");
-                        saveUserToFirestore(user);
+                        // If image upload fails, save Customer without image
+                        Customer.setImgUrl("https://avatar.iran.liara.run/public/1");
+                        saveUserToFirestore(Customer);
                     });
         } else {
-            // No image selected, save user directly
-            saveUserToFirestore(user);
+            // No image selected, save Customer directly
+            saveUserToFirestore(Customer);
         }
     }
 
-    private void saveUserToFirestore(user user) {
-        if (existingUser != null) {
-            // Update existing user
-            firebaseHelper.updateUserInFirestore(user)
+    private void saveUserToFirestore(Customer Customer) {
+        if (existingCustomer != null) {
+            // Update existing Customer
+            firebaseHelper.updateUserInFirestore(Customer)
                     .addOnSuccessListener(aVoid -> {
                         if (listener != null) {
-                            listener.onUserUpdated(user);
+                            listener.onUserUpdated(Customer);
                         }
                         Toast.makeText(context, "User updated successfully", Toast.LENGTH_SHORT).show();
                         dialog.dismiss();
                     })
                     .addOnFailureListener(e -> {
-                        handleSaveError("Failed to update user: " + e.getMessage());
+                        handleSaveError("Failed to update Customer: " + e.getMessage());
                     });
         } else {
-            // Save new user
-            firebaseHelper.saveUserToFirestore(user)
+            // Save new Customer
+            firebaseHelper.saveUserToFirestore(Customer)
                     .addOnSuccessListener(aVoid -> {
                         if (listener != null) {
-                            listener.onUserSaved(user);
+                            listener.onUserSaved(Customer);
                         }
                         Toast.makeText(context, "User saved successfully", Toast.LENGTH_SHORT).show();
                         dialog.dismiss();
                     })
                     .addOnFailureListener(e -> {
-                        handleSaveError("Failed to save user: " + e.getMessage());
+                        handleSaveError("Failed to save Customer: " + e.getMessage());
                     });
         }
     }
 
     private void handleSaveError(String error) {
         btnSave.setEnabled(true);
-        btnSave.setText(existingUser != null ? "Update User" : "Save User");
+        btnSave.setText(existingCustomer != null ? "Update User" : "Save User");
         Toast.makeText(context, error, Toast.LENGTH_LONG).show();
 
         if (listener != null) {

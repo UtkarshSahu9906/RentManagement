@@ -9,24 +9,24 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.utkarsh.rentmanagement.model.user;
+import com.utkarsh.rentmanagement.model.Customer;
 import com.utkarsh.rentmanagement.R;
 import java.util.ArrayList;
 import java.util.List;
 
-public class userAdapter extends RecyclerView.Adapter<userAdapter.ItemViewHolder> {
+public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.ItemViewHolder> {
 
-    private List<user> userList;
-    private List<user> userListFull;
+    private List<Customer> customerList;
+    private List<Customer> customerListFull;
     private OnItemClickListener listener;
 
     public interface OnItemClickListener {
-        void onItemClick(user item);
+        void onItemClick(Customer item);
     }
 
-    public userAdapter(List<user> userList, OnItemClickListener listener) {
-        this.userList = new ArrayList<>(userList);
-        this.userListFull = new ArrayList<>(userList);
+    public CustomerAdapter(List<Customer> customerList, OnItemClickListener listener) {
+        this.customerList = new ArrayList<>(customerList);
+        this.customerListFull = new ArrayList<>(customerList);
         this.listener = listener;
     }
 
@@ -40,24 +40,24 @@ public class userAdapter extends RecyclerView.Adapter<userAdapter.ItemViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull ItemViewHolder holder, int position) {
-        user user = userList.get(position);
-        holder.bind(user, listener);
+        Customer Customer = customerList.get(position);
+        holder.bind(Customer, listener);
     }
 
     @Override
     public int getItemCount() {
-        return userList.size();
+        return customerList.size();
     }
 
     // Search filter method
     public void filter(String query) {
-        List<user> filteredList = new ArrayList<>();
+        List<Customer> filteredList = new ArrayList<>();
 
         if (query == null || query.isEmpty()) {
-            filteredList.addAll(userListFull);
+            filteredList.addAll(customerListFull);
         } else {
             String filterPattern = query.toLowerCase().trim();
-            for (user item : userListFull) {
+            for (Customer item : customerListFull) {
                 if (item.getName().contains(filterPattern) ||
                         item.getAddress().toLowerCase().contains(filterPattern)) {
                     filteredList.add(item);
@@ -65,24 +65,24 @@ public class userAdapter extends RecyclerView.Adapter<userAdapter.ItemViewHolder
             }
         }
 
-        userList.clear();
-        userList.addAll(filteredList);
+        customerList.clear();
+        customerList.addAll(filteredList);
         notifyDataSetChanged();
     }
 
     // Update data method
-    public void updateData(List<user> newItems) {
-        userList.clear();
-        userListFull.clear();
-        userList.addAll(newItems);
-        userListFull.addAll(newItems);
+    public void updateData(List<Customer> newItems) {
+        customerList.clear();
+        customerListFull.clear();
+        customerList.addAll(newItems);
+        customerListFull.addAll(newItems);
         notifyDataSetChanged();
     }
 
     // Clear all data
     public void clearData() {
-        userList.clear();
-        userListFull.clear();
+        customerList.clear();
+        customerListFull.clear();
         notifyDataSetChanged();
     }
 
@@ -99,7 +99,7 @@ public class userAdapter extends RecyclerView.Adapter<userAdapter.ItemViewHolder
             profile = itemView.findViewById(R.id.profile);
         }
 
-        public void bind(final user item, final OnItemClickListener listener) {
+        public void bind(final Customer item, final OnItemClickListener listener) {
             name.setText(item.getName());
             address.setText(item.getAddress());
             //tvPrice.setText(String.format("$%.2f", item.getAadhaarNo()));

@@ -1,6 +1,6 @@
 package com.utkarsh.rentmanagement.model;
 
-public class user {
+public class Customer {
     private String name;
     private String uid;
     private String address;
@@ -12,11 +12,11 @@ public class user {
     private String updatedAt;
 
     // Constructors
-    public user() {
+    public Customer() {
         // Default constructor required for Firebase
     }
 
-    public user(String name, String uid, String address, long mobileNo, long aadhaarNo, boolean paid, String imgUrl, String createdAt, String updatedAt) {
+    public Customer(String name, String uid, String address, long mobileNo, long aadhaarNo, boolean paid, String imgUrl, String createdAt, String updatedAt) {
         this.name = name;
         this.uid = uid;
         this.address = address;
