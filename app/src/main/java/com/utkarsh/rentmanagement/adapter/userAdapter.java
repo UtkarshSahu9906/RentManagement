@@ -59,7 +59,6 @@ public class userAdapter extends RecyclerView.Adapter<userAdapter.ItemViewHolder
             String filterPattern = query.toLowerCase().trim();
             for (user item : userListFull) {
                 if (item.getName().contains(filterPattern) ||
-                        item.getMobileNo().toLowerCase().contains(filterPattern) ||
                         item.getAddress().toLowerCase().contains(filterPattern)) {
                     filteredList.add(item);
                 }
