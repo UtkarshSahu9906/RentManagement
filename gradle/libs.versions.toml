@@ -1,11 +1,17 @@
 [versions]
+activityVersion = "1.12.0"
 agp = "8.13.1"
 appcompatVersion = "1.4.1"
 cardview = "1.0.0"
 constraintlayoutVersion = "2.2.1"
 firebaseAuth = "24.0.1"
+firebaseBom = "34.6.0"
+fragment = "1.8.9"
 glide = "5.0.5"
+glideVersion = "4.15.1"
 googleServices = "4.4.2"
+imagepicker = "2.1"
+imagepickerSupport = "1.7.1"
 junit = "4.13.2"
 junitVersion = "1.1.5"
 espressoCore = "3.5.1"
@@ -16,13 +22,25 @@ constraintlayout = "2.1.4"
 materialVersion = "1.13.0"
 playServicesAuth = "21.4.0"
 recyclerview = "1.4.0"
+firebaseFirestore = "26.0.2"
+firebaseStorage = "22.0.1"
+playServicesCastFramework = "22.2.0"
 
 [libraries]
+activity-v1120 = { module = "androidx.activity:activity", version.ref = "activityVersion" }
 appcompat-v141 = { module = "androidx.appcompat:appcompat", version.ref = "appcompatVersion" }
 cardview = { module = "androidx.cardview:cardview", version.ref = "cardview" }
 constraintlayout-v221 = { module = "androidx.constraintlayout:constraintlayout", version.ref = "constraintlayoutVersion" }
 firebase-auth = { module = "com.google.firebase:firebase-auth", version.ref = "firebaseAuth" }
+firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
+firebase-firestore = { module = "com.google.firebase:firebase-firestore" }
+firebase-storage = { module = "com.google.firebase:firebase-storage" }
+fragment = { module = "androidx.fragment:fragment", version.ref = "fragment" }
 glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
+glide-v4151 = { module = "com.github.bumptech.glide:glide", version.ref = "glideVersion" }
+google-firebase-auth = { module = "com.google.firebase:firebase-auth" }
+imagepicker = { module = "com.github.dhaval2404:imagepicker", version.ref = "imagepicker" }
+imagepicker-support = { module = "com.github.dhaval2404:imagepicker-support", version.ref = "imagepickerSupport" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
@@ -33,6 +51,9 @@ constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayo
 material-v1130 = { module = "com.google.android.material:material", version.ref = "materialVersion" }
 play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "playServicesAuth" }
 recyclerview = { module = "androidx.recyclerview:recyclerview", version.ref = "recyclerview" }
+google-firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore", version.ref = "firebaseFirestore" }
+google-firebase-storage = { group = "com.google.firebase", name = "firebase-storage", version.ref = "firebaseStorage" }
+play-services-cast-framework = { group = "com.google.android.gms", name = "play-services-cast-framework", version.ref = "playServicesCastFramework" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

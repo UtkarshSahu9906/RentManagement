@@ -1,5 +1,7 @@
 package com.utkarsh.rentmanagement;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -7,23 +9,33 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.utkarsh.rentmanagement.adapter.userAdapter;
+import com.utkarsh.rentmanagement.dialog.UserDialog;
 import com.utkarsh.rentmanagement.model.user;
 import com.utkarsh.rentmanagement.utils.AuthUtils;
+import com.utkarsh.rentmanagement.utils.FirebaseHelper;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SearchListActivity extends AppCompatActivity {
+public class SearchListActivity extends AppCompatActivity implements UserDialog.UserDialogListener {
 
     private RecyclerView recyclerView;
     private EditText etSearch;
     private Button btnSearch;
     private TextView tvEmpty;
+    private FloatingActionButton fabAddUser;
     private userAdapter adapter;
     private List<user> userList;
+    private FirebaseHelper firebaseHelper;
+    private UserDialog userDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,10 +48,24 @@ public class SearchListActivity extends AppCompatActivity {
             return;
         }
 
+        firebaseHelper = new FirebaseHelper();
         initializeViews();
         setupRecyclerView();
-        loadSampleData();
+        loadUsersFromFirebase(); // Changed from loadSampleData()
         setupSearchFunctionality();
+        setupFloatingActionButton();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // Handle image picker results
+        if (requestCode == 1001 || requestCode == 1002) { // ImagePicker request codes
+            if (userDialog != null) {
+                userDialog.handleActivityResult(requestCode, resultCode, data);
+            }
+        }
     }
 
     private void initializeViews() {
@@ -47,6 +73,7 @@ public class SearchListActivity extends AppCompatActivity {
         etSearch = findViewById(R.id.etSearch);
         btnSearch = findViewById(R.id.btnSearch);
         tvEmpty = findViewById(R.id.tvEmpty);
+        fabAddUser = findViewById(R.id.fabAddUser); // Make sure this ID exists in your layout
     }
 
     private void setupRecyclerView() {
@@ -54,7 +81,7 @@ public class SearchListActivity extends AppCompatActivity {
         adapter = new userAdapter(userList, new userAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(user item) {
-                onItemClicked(item);
+                onUserClicked(item);
             }
         });
 
@@ -71,24 +98,31 @@ public class SearchListActivity extends AppCompatActivity {
         });
     }
 
-    private void loadSampleData() {
-        // Add sample data - replace with your actual data source
-        userList.clear();
-        // Sample user data
-        userList.add(new user("Rajesh Kumar", "USER001", "123 Main Street, Mumbai, Maharashtra", "9876543210", 123456789012L, true, "https://avatar.iran.liara.run/public/22", "2024-01-15", "2024-11-25"));
-        userList.add(new user("Priya Sharma", "USER002", "456 Park Avenue, Delhi", "8765432109", 234567890123L, false, "https://avatar.iran.liara.run/public/23", "2024-02-20", "2024-11-24"));
-        userList.add(new user("Amit Patel", "USER003", "789 MG Road, Bangalore, Karnataka", "7654321098", 345678901234L, true, "https://avatar.iran.liara.run/public/24", "2024-03-10", "2024-11-23"));
-        userList.add(new user("Sneha Gupta", "USER004", "321 Church Street, Chennai, Tamil Nadu", "6543210987", 456789012345L, true, "https://avatar.iran.liara.run/public/25", "2024-04-05", "2024-11-22"));
-        userList.add(new user("Vikram Singh", "USER005", "654 Marine Drive, Kolkata, West Bengal", "5432109876", 567890123456L, false, "https://avatar.iran.liara.run/public/26", "2024-05-12", "2024-11-21"));
-        userList.add(new user("Anjali Reddy", "USER006", "987 Jubilee Hills, Hyderabad, Telangana", "4321098765", 678901234567L, true, "https://avatar.iran.liara.run/public/27", "2024-06-18", "2024-11-20"));
-        userList.add(new user("Rahul Verma", "USER007", "147 Sector 17, Chandigarh", "3210987654", 789012345678L, false, "https://avatar.iran.liara.run/public/28", "2024-07-22", "2024-11-19"));
-        userList.add(new user("Neha Joshi", "USER008", "258 Ashram Road, Ahmedabad, Gujarat", "2109876543", 890123456789L, true, "https://avatar.iran.liara.run/public/29", "2024-08-30", "2024-11-18"));
-        userList.add(new user("Sanjay Mehta", "USER009", "369 FC Road, Pune, Maharashtra", "1098765432", 901234567890L, true, "https://avatar.iran.liara.run/public/30", "2024-09-14", "2024-11-17"));
-        userList.add(new user("Pooja Desai", "USER010", "741 Jaipur Road, Jaipur, Rajasthan", "9988776655", 112233445566L, false, "https://avatar.iran.liara.run/public/31", "2024-10-08", "2024-11-16"));
-        userList.add(new user("Karan Malhotra", "USER011", "852 Gandhi Nagar, Lucknow, UP", "8877665544", 223344556677L, true, "https://avatar.iran.liara.run/public/32", "2024-11-01", "2024-11-15"));
-        userList.add(new user("Meera Nair", "USER012", "963 Banjara Hills, Kochi, Kerala", "7766554433", 334455667788L, false, "https://avatar.iran.liara.run/public/33", "2024-11-10", "2024-11-14"));
+    private void loadUsersFromFirebase() {
+        // Show loading
+        tvEmpty.setText("Loading users...");
+        tvEmpty.setVisibility(View.VISIBLE);
+        recyclerView.setVisibility(View.GONE);
 
-        adapter.updateData(userList);
+        FirebaseFirestore.getInstance().collection("users")
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    userList.clear();
+                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                        try {
+                            user user = document.toObject(user.class);
+                            userList.add(user);
+                        } catch (Exception e) {
+                            Toast.makeText(this, "Error loading user: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                    adapter.updateData(userList);
+                    checkEmptyState();
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(this, "Failed to load users: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    checkEmptyState();
+                });
     }
 
     private void setupSearchFunctionality() {
@@ -134,14 +168,29 @@ public class SearchListActivity extends AppCompatActivity {
         });
     }
 
+    private void setupFloatingActionButton() {
+        fabAddUser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showAddUserDialog();
+            }
+        });
+    }
+
+    private void showAddUserDialog() {
+        userDialog = new UserDialog(this, this);
+        userDialog.show();
+    }
+
+    private void showEditUserDialog(user user) {
+        userDialog = new UserDialog(this, user, this);
+        userDialog.show();
+    }
+
     private void performSearch(String query) {
         if (adapter != null) {
             adapter.filter(query);
         }
-
-        // Hide keyboard after search (optional)
-        // InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        // imm.hideSoftInputFromWindow(etSearch.getWindowToken(), 0);
     }
 
     private void checkEmptyState() {
@@ -152,9 +201,9 @@ public class SearchListActivity extends AppCompatActivity {
             // Update empty text based on search
             String searchQuery = etSearch.getText().toString().trim();
             if (!searchQuery.isEmpty()) {
-                tvEmpty.setText("No items found for: " + searchQuery);
+                tvEmpty.setText("No users found for: " + searchQuery);
             } else {
-                tvEmpty.setText("No items available");
+                tvEmpty.setText("No users available");
             }
         } else {
             recyclerView.setVisibility(View.VISIBLE);
@@ -162,17 +211,110 @@ public class SearchListActivity extends AppCompatActivity {
         }
     }
 
-    private void onItemClicked(user item) {
-        // Handle item click - show details, edit, etc.
-        android.widget.Toast.makeText(this,
-                "Clicked: " + item.getName() + "\nPrice: $" + item.getMobileNo(),
-                android.widget.Toast.LENGTH_SHORT).show();
+    private void onUserClicked(user user) {
+        // Show options: Edit or View Details
+        showUserOptionsDialog(user);
+    }
 
-        // You can start a new activity or show a dialog here
-        // Example: Open item details activity
-        // Intent intent = new Intent(this, ItemDetailActivity.class);
-        // intent.putExtra("item_id", item.getId());
-        // startActivity(intent);
+    private void showUserOptionsDialog(final user user) {
+        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
+        builder.setTitle("User Options");
+        builder.setMessage("Choose an action for " + user.getName());
+
+        builder.setPositiveButton("Edit", (dialog, which) -> {
+            showEditUserDialog(user);
+        });
+
+        builder.setNegativeButton("View Details", (dialog, which) -> {
+            showUserDetails(user);
+        });
+
+        builder.setNeutralButton("Delete", (dialog, which) -> {
+            showDeleteConfirmation(user);
+        });
+
+        builder.show();
+    }
+
+    private void showDeleteConfirmation(user user) {
+        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
+        builder.setTitle("Delete User");
+        builder.setMessage("Are you sure you want to delete " + user.getName() + "? This action cannot be undone.");
+
+        builder.setPositiveButton("Delete", (dialog, which) -> {
+            deleteUserFromFirebase(user);
+        });
+
+        builder.setNegativeButton("Cancel", null);
+        builder.show();
+    }
+
+    private void deleteUserFromFirebase(user user) {
+        // Delete image from storage first
+        if (!user.getImgUrl().equals("default")) {
+            firebaseHelper.deleteImageFromFirebase(user.getImgUrl());
+        }
+
+        // Delete user from firestore
+        firebaseHelper.deleteUserFromFirestore(String.valueOf(user.getMobileNo()))
+                .addOnSuccessListener(aVoid -> {
+                    // Remove from local list
+                    userList.removeIf(u -> String.valueOf(u.getMobileNo()).equals(String.valueOf(user.getMobileNo())));
+                    adapter.updateData(userList);
+                    Toast.makeText(this, "User deleted successfully", Toast.LENGTH_SHORT).show();
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(this, "Failed to delete user: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                });
+    }
+
+    private void showUserDetails(user user) {
+        // Create a detailed view dialog
+        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
+        builder.setTitle("User Details");
+
+        String details = "Name: " + user.getName() + "\n" +
+                "User ID: " + user.getUid() + "\n" +
+                "Address: " + user.getAddress() + "\n" +
+                "Mobile: " + user.getMobileNo() + "\n" +
+                "Aadhaar: " + user.getAadhaarNo() + "\n" +
+                "Payment Status: " + (user.isPaid() ? "Paid" : "Pending") + "\n" +
+                "Created: " + user.getCreatedAt() + "\n" +
+                "Updated: " + user.getUpdatedAt();
+
+        builder.setMessage(details);
+        builder.setPositiveButton("OK", null);
+        builder.show();
+    }
+
+    // UserDialogListener implementation
+    @Override
+    public void onUserSaved(user user) {
+        // Add new user to the list
+        userList.add(0, user);
+        adapter.updateData(userList);
+        recyclerView.smoothScrollToPosition(0);
+        checkEmptyState();
+        Toast.makeText(this, "User added successfully!", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onUserUpdated(user user) {
+        // Find and update the existing user
+        for (int i = 0; i < userList.size(); i++) {
+            if (String.valueOf(userList.get(i).getMobileNo()).equals(String.valueOf(user.getMobileNo()))) {
+                userList.set(i, user);
+                break;
+            }
+        }
+        adapter.updateData(userList);
+        checkEmptyState();
+        Toast.makeText(this, "User updated successfully!", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onUserSaveFailed(String error) {
+        Toast.makeText(this, "Error: " + error, Toast.LENGTH_LONG).show();
     }
 
     @Override

@@ -4,7 +4,7 @@ public class user {
     private String name;
     private String uid;
     private String address;
-    private String mobileNo;
+    private long mobileNo;
     private long aadhaarNo;
     private boolean paid;
     private String imgUrl;
@@ -16,7 +16,7 @@ public class user {
         // Default constructor required for Firebase
     }
 
-    public user(String name, String uid, String address, String mobileNo, long aadhaarNo, boolean paid, String imgUrl, String createdAt, String updatedAt) {
+    public user(String name, String uid, String address, long mobileNo, long aadhaarNo, boolean paid, String imgUrl, String createdAt, String updatedAt) {
         this.name = name;
         this.uid = uid;
         this.address = address;
@@ -54,11 +54,11 @@ public class user {
         this.address = address;
     }
 
-    public String  getMobileNo() {
+    public long  getMobileNo() {
         return mobileNo;
     }
 
-    public void setMobileNo(String mobileNo) {
+    public void setMobileNo(long mobileNo) {
         this.mobileNo = mobileNo;
     }
 
