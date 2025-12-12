@@ -21,6 +21,19 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.RentManagement">
+        <activity
+            android:name=".AllMembershipsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AllShopsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".JoinShopActivity"
+            android:exported="false" />
+        <activity
+            android:name=".CreateShopActivity"
+            android:exported="false" />
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"
@@ -30,6 +43,7 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
+
         <activity
             android:name=".SplashActivity"
             android:exported="true">

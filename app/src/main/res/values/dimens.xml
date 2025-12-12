@@ -1,0 +1,10 @@
+<resources>
+    <!-- FAB margin -->
+    <dimen name="fab_margin">72dp</dimen>
+
+    <!-- Other dimensions -->
+    <dimen name="card_corner_radius">20dp</dimen>
+    <dimen name="card_elevation">8dp</dimen>
+    <dimen name="header_height">180dp</dimen>
+    <dimen name="stats_card_height">100dp</dimen>
+</resources>

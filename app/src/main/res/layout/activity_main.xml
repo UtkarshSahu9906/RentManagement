@@ -1,24 +1,384 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp"
-    android:gravity="center">
+    android:background="@drawable/background_gradient">
 
-    <Button
-        android:id="@+id/btn"
+    <!-- Animated Header -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/headerCard"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:backgroundTint="@color/design_default_color_primary"
-        android:text="next"
-        android:textAllCaps="false" />
-    <Button
-        android:id="@+id/btnGoToSearch"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:backgroundTint="@color/design_default_color_primary"
-        android:text="btnGoToSearch"
-        android:textAllCaps="false" />
+        android:layout_height="180dp"
+        android:layout_margin="16dp"
+        app:cardBackgroundColor="@color/primary"
+        app:cardCornerRadius="24dp"
+        app:cardElevation="12dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:rippleColor="@color/white_20">
 
-</LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:padding="24dp">
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/avatarAnimation"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                app:lottie_rawRes="@raw/avatar_animation"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="true"
+                android:layout_marginBottom="12dp" />
+
+            <TextView
+                android:id="@+id/tvWelcomeTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Welcome Back!"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                android:layout_marginBottom="4dp" />
+
+            <TextView
+                android:id="@+id/tvWelcomeSubtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Manage your business memberships"
+                android:textSize="14sp"
+                android:textColor="@color/white_80" />
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Stats Cards -->
+    <LinearLayout
+        android:id="@+id/statsLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="12dp"
+        app:layout_constraintTop_toBottomOf="@+id/headerCard"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- Shops Stats -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="0dp"
+            android:layout_height="100dp"
+            android:layout_weight="1"
+            android:layout_marginEnd="8dp"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="8dp"
+            app:rippleColor="@color/primary_10"
+            android:foreground="?android:attr/selectableItemBackground">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:padding="16dp">
+
+                <ImageView
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:src="@drawable/ic_store_gradient"
+                    android:layout_marginBottom="8dp" />
+
+                <TextView
+                    android:id="@+id/tvShopStats"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/text_primary" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="My Shops"
+                    android:textSize="12sp"
+                    android:textColor="@color/text_secondary" />
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Memberships Stats -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="0dp"
+            android:layout_height="100dp"
+            android:layout_weight="1"
+            android:layout_marginStart="8dp"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="8dp"
+            app:rippleColor="@color/secondary_10"
+            android:foreground="?android:attr/selectableItemBackground">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:padding="16dp">
+
+                <ImageView
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:src="@drawable/ic_membership_gradient"
+                    android:layout_marginBottom="8dp" />
+
+                <TextView
+                    android:id="@+id/tvMembershipStats"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/text_primary" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Memberships"
+                    android:textSize="12sp"
+                    android:textColor="@color/text_secondary" />
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+    </LinearLayout>
+
+    <!-- Ownership Section -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardOwnership"
+        android:layout_width="0dp"
+        android:layout_height="200dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="20dp"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="10dp"
+        app:layout_constraintTop_toBottomOf="@+id/statsLayout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <!-- Header with icon and title -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:padding="20dp"
+                android:background="@drawable/section_header_gradient">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_store_white"
+                    android:layout_marginEnd="12dp"
+                    app:tint="@android:color/white" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="MY SHOPS"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textColor="@android:color/white"
+                    android:letterSpacing="0.1" />
+
+                <TextView
+                    android:id="@+id/tvViewAllShops"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="VIEW ALL"
+                    android:textSize="12sp"
+                    android:textColor="@android:color/white"
+                    android:textStyle="bold"
+                    android:letterSpacing="0.1"
+                    android:paddingHorizontal="12dp"
+                    android:paddingVertical="6dp"
+                    android:background="@drawable/rounded_corner_white_20" />
+
+            </LinearLayout>
+
+            <!-- Ownership RecyclerView -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView2"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:clipToPadding="false"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp" />
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Customership Section -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardCustomership"
+        android:layout_width="0dp"
+        android:layout_height="200dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="16dp"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="10dp"
+        app:layout_constraintTop_toBottomOf="@+id/cardOwnership"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <!-- Header with icon and title -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:padding="20dp"
+                android:background="@drawable/section_header_gradient_secondary">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_membership_white"
+                    android:layout_marginEnd="12dp"
+                    app:tint="@android:color/white" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="MY MEMBERSHIPS"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textColor="@android:color/white"
+                    android:letterSpacing="0.1" />
+
+                <TextView
+                    android:id="@+id/tvViewAllMemberships"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="VIEW ALL"
+                    android:textSize="12sp"
+                    android:textColor="@android:color/white"
+                    android:textStyle="bold"
+                    android:letterSpacing="0.1"
+                    android:paddingHorizontal="12dp"
+                    android:paddingVertical="6dp"
+                    android:background="@drawable/rounded_corner_white_20" />
+
+            </LinearLayout>
+
+            <!-- Customership RecyclerView -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerViewCustomership"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:clipToPadding="false"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp" />
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Floating Action Buttons with Animation -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabMain"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="24dp"
+        android:src="@drawable/ic_add_white"
+        app:backgroundTint="@color/primary"
+        app:elevation="12dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:maxImageSize="32dp"
+        app:rippleColor="@color/primary_dark" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabCreateShop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="24dp"
+        android:src="@drawable/ic_store_white"
+        app:backgroundTint="@color/accent"
+        app:elevation="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/fabMain"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:visibility="gone" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabJoinShop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="24dp"
+        android:src="@drawable/ic_group_add_white"
+        app:backgroundTint="@color/secondary"
+        app:elevation="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/fabCreateShop"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:visibility="gone" />
+
+    <!-- Empty State Illustrations -->
+    <ImageView
+        android:id="@+id/ivNoShops"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:src="@drawable/ic_empty_shops"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@+id/cardOwnership"
+        app:layout_constraintBottom_toTopOf="@+id/cardCustomership"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <ImageView
+        android:id="@+id/ivNoMemberships"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:src="@drawable/ic_empty_memberships"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@+id/cardCustomership"
+        app:layout_constraintBottom_toTopOf="@+id/fabMain"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

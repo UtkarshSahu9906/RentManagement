@@ -63,6 +63,7 @@ dependencies {
     // Other dependencies
     implementation libs.imagepicker
     implementation 'com.github.dhaval2404:imagepicker:2.0'
+    implementation "com.airbnb.android:lottie:6.6.6"
 
 
 }
