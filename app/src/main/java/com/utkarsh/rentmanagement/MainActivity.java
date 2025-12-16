@@ -6,16 +6,21 @@ import android.animation.LayoutTransition;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.OvershootInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 import com.airbnb.lottie.LottieAnimationView;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.utkarsh.rentmanagement.model.Shop;
 import com.utkarsh.rentmanagement.utils.AuthUtils;
+import com.utkarsh.rentmanagement.utils.OwnershipDatabase;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -25,10 +30,25 @@ public class MainActivity extends AppCompatActivity {
     private LottieAnimationView avatarAnimation;
     private TextView tvWelcomeTitle, tvWelcomeSubtitle;
     private ImageView ivNoShops, ivNoMemberships;
+    private OwnershipDatabase ownershipDb;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
+
+        ownershipDb = new OwnershipDatabase();
+
+        // Initialize ownership for current user
+        ownershipDb.initializeUserOwnership((success, message) -> {
+            if (success) {
+                Log.d("Ownership", message);
+            } else {
+                Log.e("Ownership", message);
+            }
+        });
 
         // Check authentication first
         if (!AuthUtils.isUserLoggedIn()) {
@@ -266,5 +286,52 @@ public class MainActivity extends AppCompatActivity {
         } else {
             super.onBackPressed();
         }
+    }
+
+
+    // Get all shops
+    private void loadUserShops() {
+        ownershipDb.getUserShops((success, message, shops) -> {
+            if (success) {
+                if (shops.isEmpty()) {
+                    Toast.makeText(this, "No shops yet", Toast.LENGTH_SHORT).show();
+                } else {
+                    for (Shop shop : shops) {
+                        Log.d("Shop", shop.getShopName() + " - " + shop.getShopId());
+                    }
+                }
+            } else {
+                Toast.makeText(this, "Error: " + message, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    // Update a shop
+    private void updateExistingShop(String shopId) {
+        ownershipDb.updateShop(shopId,
+                "Updated Shop Name",
+                "https://new-bg-img.com/image.jpg",
+                "https://new-logo.com/logo.png",
+                (success, message) -> {
+                    if (success) {
+                        Toast.makeText(this, "Shop updated!", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    // Check ownership
+    private void checkIfUserOwnsShop(String shopId) {
+        ownershipDb.checkShopOwnership(shopId,
+                (success, message, ownsShop) -> {
+                    if (success) {
+                        if (ownsShop) {
+                            Toast.makeText(this, "You own this shop",
+                                    Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(this, "You don't own this shop",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
     }
 }
