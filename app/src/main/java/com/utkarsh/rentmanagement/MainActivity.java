@@ -18,11 +18,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.airbnb.lottie.LottieAnimationView;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.utkarsh.rentmanagement.dialog.UserInfoDialog;
 import com.utkarsh.rentmanagement.model.Shop;
 import com.utkarsh.rentmanagement.utils.AuthUtils;
 import com.utkarsh.rentmanagement.utils.OwnershipDatabase;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements UserInfoDialog.UserSaveListener {
 
     // Views from your layout
     private MaterialCardView headerCard;
@@ -61,6 +62,13 @@ public class MainActivity extends AppCompatActivity {
         initializeViews();
         setupAnimations();
         setupClickListeners();
+
+
+
+        findViewById(R.id.tvShopStats).setOnClickListener(v -> {
+            // Show the user info dialog
+            UserInfoDialog.showDialog(getSupportFragmentManager(), this);
+        });
 
         // Optional: Add layout transition animations
         enableLayoutTransitions();
@@ -333,5 +341,32 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 });
+    }
+    @Override
+    public void onUserSaved(String userId, String username) {
+        // Handle successful save
+        String message = "User '" + username + "' saved successfully!\nUser ID: " + userId;
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+
+        // Update UI or navigate to next screen
+        // Example: updateUserStatus(userId);
+    }
+
+    @Override
+    public void onUserSaveFailed(String error) {
+        // Handle save failure
+        Toast.makeText(this, "Failed to save user: " + error, Toast.LENGTH_LONG).show();
+    }
+
+    // Method to open dialog with pre-filled data (for editing)
+    private void openEditUserDialog() {
+        UserInfoDialog.showDialogWithData(
+                getSupportFragmentManager(),
+                "John Doe",          // Existing username
+                "9876543210",        // Existing mobile
+                "123 Main St, City", // Existing address
+                "john@example.com",  // Existing email
+                this
+        );
     }
 }

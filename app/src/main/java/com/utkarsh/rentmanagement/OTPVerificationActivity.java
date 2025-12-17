@@ -10,9 +10,14 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class OTPVerificationActivity extends AppCompatActivity {
 
@@ -31,6 +36,28 @@ public class OTPVerificationActivity extends AppCompatActivity {
         initializeViews();
         getIntentData();
         setupClickListeners();
+    }
+
+
+    public static boolean checkUserExistsSync(String uid) {
+        if (uid == null || uid.isEmpty()) {
+            return false;
+        }
+
+        try {
+            // Use Tasks.await for synchronous operation
+            Task<DocumentSnapshot> task = FirebaseFirestore.getInstance()
+                    .collection("users")
+                    .document(uid)
+                    .get();
+
+            DocumentSnapshot document = Tasks.await(task);
+            return document != null && document.exists();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     private void initializeViews() {
@@ -78,7 +105,17 @@ public class OTPVerificationActivity extends AppCompatActivity {
                         Toast.makeText(OTPVerificationActivity.this,
                                 "Login successful!", Toast.LENGTH_SHORT).show();
 
-                        Intent intent = new Intent(OTPVerificationActivity.this, MainActivity.class);
+
+                        String uid = mAuth.getCurrentUser().getUid();
+                        Intent intent;
+
+  if(checkUserExistsSync(uid)){
+       intent = new Intent(OTPVerificationActivity.this, MainActivity.class);
+
+  }else {
+       intent = new Intent(OTPVerificationActivity.this, UserInfoActivity.class);
+
+  }
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intent);
                         finish();
