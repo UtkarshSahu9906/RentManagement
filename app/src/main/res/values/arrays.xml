@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="rentable_categories">
+        <item>Select Category</item>
+        <item>Construction Equipment</item>
+        <item>Party &amp; Event Supplies</item>
+        <item>Tools &amp; Machinery</item>
+        <item>Audio-Visual Equipment</item>
+        <item>Furniture &amp; Decor</item>
+        <item>Vehicles &amp; Transport</item>
+        <item>Sports &amp; Fitness Gear</item>
+        <item>Camping &amp; Hiking Gear</item>
+        <item>Gardening &amp; Home Improvement</item>
+        <item>Outdoor Equipment</item>
+        <item>Office Equipment</item>
+        <item>Cleaning &amp; Household Goods</item>
+        <item>Electrical Equipment</item>
+        <item> Outdoor Gear</item>
+        <item>Medical Equipment</item>
+        <item>Industrial Equipment</item>
+        <item>Home Appliances</item>
+        <item>Other Rentable Items</item>
+    </string-array>
+</resources>

@@ -21,8 +21,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.RentManagement">
+
         <activity
             android:name=".MainActivity2"
+            android:exported="false" />
+        <activity
+            android:name=".SplashActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
@@ -51,7 +55,7 @@
         </provider>
 
         <activity
-            android:name=".SplashActivity"
+            android:name=".AddRentableItemActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -68,9 +72,7 @@
         <activity
             android:name=".SearchListActivity"
             android:label="Search Properties" />
-        <activity
-            android:name=".MainActivity2"
-            android:exported="false" />
+        <activity android:name=".UserInfoActivity" />
     </application>
 
 </manifest>

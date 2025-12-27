@@ -9,6 +9,10 @@
     <color name="info">#2196F3</color>
 
 
+    <color name="textColorPrimary">#212121</color>
+    <color name="textColorSecondary">#757575</color>
+
+
 
         <!-- Primary Colors -->
         <color name="primary">#6366F1</color>
