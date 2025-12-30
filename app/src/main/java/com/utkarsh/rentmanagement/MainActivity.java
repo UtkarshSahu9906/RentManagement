@@ -15,7 +15,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import com.airbnb.lottie.LottieAnimationView;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.utkarsh.rentmanagement.dialog.UserInfoDialog;
@@ -28,7 +27,7 @@ public class MainActivity extends AppCompatActivity implements UserInfoDialog.Us
     // Views from your layout
     private MaterialCardView headerCard;
     private FloatingActionButton fabMain, fabCreateShop, fabJoinShop;
-    private LottieAnimationView avatarAnimation;
+   // private LottieAnimationView avatarAnimation;
     private TextView tvWelcomeTitle, tvWelcomeSubtitle;
     private ImageView ivNoShops, ivNoMemberships;
     private OwnershipDatabase ownershipDb;
@@ -85,7 +84,7 @@ public class MainActivity extends AppCompatActivity implements UserInfoDialog.Us
         fabMain = findViewById(R.id.fabMain);
         fabCreateShop = findViewById(R.id.fabCreateShop);
         fabJoinShop = findViewById(R.id.fabJoinShop);
-        avatarAnimation = findViewById(R.id.avatarAnimation);
+       // avatarAnimation = findViewById(R.id.avatarAnimation);
         tvWelcomeTitle = findViewById(R.id.tvWelcomeTitle);
         tvWelcomeSubtitle = findViewById(R.id.tvWelcomeSubtitle);
         ivNoShops = findViewById(R.id.ivNoShops);
@@ -114,11 +113,11 @@ public class MainActivity extends AppCompatActivity implements UserInfoDialog.Us
         setupFABAnimations();
 
         // Setup Lottie animation
-        if (avatarAnimation != null) {
-            avatarAnimation.setAnimation(R.raw.avatar_animation); // Make sure you have this file
-            avatarAnimation.playAnimation();
-            avatarAnimation.loop(true);
-        }
+//        if (avatarAnimation != null) {
+//            avatarAnimation.setAnimation(R.raw.avatar_animation); // Make sure you have this file
+//            avatarAnimation.playAnimation();
+//            avatarAnimation.loop(true);
+//        }
     }
 
     private void setupFABAnimations() {
@@ -272,18 +271,18 @@ public class MainActivity extends AppCompatActivity implements UserInfoDialog.Us
         hideFABs();
 
         // Restart animation
-        if (avatarAnimation != null) {
-            avatarAnimation.resumeAnimation();
-        }
+//        if (avatarAnimation != null) {
+//            avatarAnimation.resumeAnimation();
+//        }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         // Pause animation to save battery
-        if (avatarAnimation != null) {
-            avatarAnimation.pauseAnimation();
-        }
+//        if (avatarAnimation != null) {
+//            avatarAnimation.pauseAnimation();
+//        }
     }
 
     @Override

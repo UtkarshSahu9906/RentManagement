@@ -1,9 +1,14 @@
 [versions]
 activityVersion = "1.12.0"
-agp = "8.13.1"
+agp = "8.13.2"
 appcompatVersion = "1.4.1"
 cardview = "1.0.0"
+cloudinaryAndroid = "2.3.1"
+compiler = "5.0.5"
+compilerVersion = "4.15.1"
 constraintlayoutVersion = "2.2.1"
+converterGson = "3.0.0"
+dexter = "6.2.3"
 dotlottieAndroid = "0.5.0"
 firebaseAuth = "24.0.1"
 firebaseBom = "34.6.0"
@@ -13,10 +18,12 @@ glideVersion = "4.15.1"
 googleServices = "4.4.2"
 imagepicker = "2.1"
 imagepickerSupport = "1.7.1"
+imagepickerVersion = "2.0"
 junit = "4.13.2"
 junitVersion = "1.1.5"
 espressoCore = "3.5.1"
 appcompat = "1.6.1"
+lottie = "6.7.1"
 material = "1.10.0"
 activity = "1.8.0"
 constraintlayout = "2.1.4"
@@ -26,12 +33,20 @@ recyclerview = "1.4.0"
 firebaseFirestore = "26.0.2"
 firebaseStorage = "22.0.1"
 playServicesCastFramework = "22.2.0"
+retrofit = "3.0.0"
+playServicesCastTv = "21.1.1"
 
 [libraries]
 activity-v1120 = { module = "androidx.activity:activity", version.ref = "activityVersion" }
 appcompat-v141 = { module = "androidx.appcompat:appcompat", version.ref = "appcompatVersion" }
 cardview = { module = "androidx.cardview:cardview", version.ref = "cardview" }
+cloudinary-android = { module = "com.cloudinary:cloudinary-android", version.ref = "cloudinaryAndroid" }
+cloudinary-core = { module = "com.cloudinary:cloudinary-core", version.ref = "cloudinaryAndroid" }
+compiler = { module = "com.github.bumptech.glide:compiler", version.ref = "compiler" }
+compiler-v4151 = { module = "com.github.bumptech.glide:compiler", version.ref = "compilerVersion" }
 constraintlayout-v221 = { module = "androidx.constraintlayout:constraintlayout", version.ref = "constraintlayoutVersion" }
+converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGson" }
+dexter = { module = "com.karumi:dexter", version.ref = "dexter" }
 dotlottie-android = { module = "com.github.LottieFiles:dotlottie-android", version.ref = "dotlottieAndroid" }
 firebase-auth = { module = "com.google.firebase:firebase-auth", version.ref = "firebaseAuth" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
@@ -43,10 +58,12 @@ glide-v4151 = { module = "com.github.bumptech.glide:glide", version.ref = "glide
 google-firebase-auth = { module = "com.google.firebase:firebase-auth" }
 imagepicker = { module = "com.github.dhaval2404:imagepicker", version.ref = "imagepicker" }
 imagepicker-support = { module = "com.github.dhaval2404:imagepicker-support", version.ref = "imagepickerSupport" }
+imagepicker-v20 = { module = "com.github.dhaval2404:imagepicker", version.ref = "imagepickerVersion" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+lottie = { module = "com.airbnb.android:lottie", version.ref = "lottie" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
@@ -56,6 +73,8 @@ recyclerview = { module = "androidx.recyclerview:recyclerview", version.ref = "r
 google-firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore", version.ref = "firebaseFirestore" }
 google-firebase-storage = { group = "com.google.firebase", name = "firebase-storage", version.ref = "firebaseStorage" }
 play-services-cast-framework = { group = "com.google.android.gms", name = "play-services-cast-framework", version.ref = "playServicesCastFramework" }
+retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
+play-services-cast-tv = { group = "com.google.android.gms", name = "play-services-cast-tv", version.ref = "playServicesCastTv" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

@@ -7,7 +7,10 @@ pluginManagement {
                 includeGroupByRegex("androidx.*")
             }
         }
-
+        maven {
+            url = uri("https://company/com/maven2")
+        }
+        maven { url "https://jitpack.io" }
         mavenCentral()
         gradlePluginPortal()
     }
@@ -18,8 +21,15 @@ dependencyResolutionManagement {
         google()
         mavenCentral()
         maven { url "https://jitpack.io" }
-        maven { url 'https://maven.google.com' }
 
+        // ✅ ADD OFFICIAL CLOUDINARY MAVEN REPOSITORY
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
+        maven { url "https://maven.cloudinary.com" }
+
+        // Remove these if not needed
+        // maven { url 'https://maven.google.com' } // Already included in google()
+        // maven { url "https://maven.springframework.org/release" }
+        // maven { url "https://maven.restlet.com" }
     }
 }
 

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="20dp"
+    android:gravity="center_horizontal">
+
+    <!-- Title -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cloudinary Image Upload"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="20dp"/>
+
+    <!-- Image Preview -->
+    <ImageView
+        android:id="@+id/imgPreview"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:scaleType="centerCrop"
+        android:background="#f5f5f5"
+        app:srcCompat="@drawable/ic_baseline_image_24"
+        android:layout_marginBottom="20dp"/>
+
+    <!-- Select Image Button -->
+    <Button
+        android:id="@+id/btnSelectImage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="📷 Select Image"
+        android:layout_marginBottom="10dp"
+        android:backgroundTint="#2196F3"/>
+
+    <!-- Upload Button -->
+    <Button
+        android:id="@+id/btnUpload"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="☁️ Upload to Cloudinary"
+        android:enabled="false"
+        android:layout_marginBottom="10dp"
+        android:backgroundTint="#4CAF50"/>
+
+    <!-- Progress Bar -->
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_marginBottom="10px"/>
+
+    <!-- Status Text -->
+    <TextView
+        android:id="@+id/tvStatus"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Select an image to upload"
+        android:textSize="16sp"
+        android:layout_marginBottom="10dp"
+        android:gravity="center"/>
+
+    <!-- URL Container -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="#E3F2FD"
+        android:padding="15dp"
+        android:layout_marginTop="10dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cloudinary URL:"
+            android:textStyle="bold"
+            android:textSize="14sp"
+            android:layout_marginBottom="5dp"/>
+
+        <TextView
+            android:id="@+id/tvImageUrl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="URL will appear here after upload"
+            android:textSize="12sp"
+            android:textColor="#0D47A1"
+            android:padding="5dp"
+            android:background="#FFFFFF"/>
+
+        <Button
+            android:id="@+id/btnCopyUrl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="📋 Copy URL"
+            android:layout_gravity="end"
+            android:layout_marginTop="10dp"
+            android:enabled="false"/>
+    </LinearLayout>
+
+    <!-- Instructions -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Steps:\n1. Select image\n2. Click upload\n3. Get Cloudinary URL\n4. Copy and use URL"
+        android:textSize="12sp"
+        android:textColor="#666"
+        android:layout_marginTop="20dp"/>
+
+</LinearLayout>
